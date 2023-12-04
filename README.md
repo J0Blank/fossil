@@ -68,7 +68,7 @@ flowchart TD
     f[fossil.py]
 
     d[dump.elf]
-    v2o[virtuals_to_offsets.lzma]
+    vtoo[virtuals_to_offsets.lzma]
     o2v[offsets_to_virtuals.lzma]
     p[pointers.lzma]
     ip[inverse_pointers.lzma]
@@ -85,7 +85,7 @@ flowchart TD
     qed-->d
 
     d-->ef
-    ef-->v2o
+    ef-->vtoo
     ef-->o2v
     ef-->p
     ef-->ip
@@ -102,7 +102,7 @@ flowchart TD
     t-->tf
 
     p-->es
-    v2o-->es
+    vtoo-->es
     bmp-->es
     dllf-->es
     s-->es
