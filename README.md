@@ -53,3 +53,66 @@ It is possible to build and use a Docker/Podman container including the entire f
 	  podman run --network="host" --rm --it --volume /path/to/dumps:/data:Z localhost/fossil:latest /fossil/doubly_linked_lists.py --min-offset -8192 --max-offset 8192 --offset-step 8 --min-size 3 /data/extracted_ptrs.lzma /data/dll.lzma
 	  ```
 - To run `qemu_elf_dumper.py` run `qemu` on the host machine and call `qemu_elf_dumper.py` inside the container with an extra option: if the bounded host path is `HOST_PATH_TO_DATA` add `-d HOST_PATH_TO_DATA` option to the command line
+## Workflow in a glance
+```mermaid
+---
+title: Fossil
+---
+flowchart TD
+    vm[Virtual Machine]
+    qed[qemu_elf_dumper.py]
+    ef[extract_features.py]
+    dll[doubly_linked_lists.py]
+    t[trees.py]
+    es[extract_structs.py]
+    f[fossil.py]
+
+    d[dump.elf]
+    v2o[virtuals_to_offsets.lzma]
+    o2v[offsets_to_virtuals.lzma]
+    p[pointers.lzma]
+    ip[inverse_pointers.lzma]
+    s[strings.lzma]
+    bmp[bitmap.lzma]
+    er[external_references.lzma]
+    func[functions.lzma]
+    dllf[doubly_linked_lists.lzma]
+    tf[trees.lzma]
+    res[results.lzma]
+    k[kernel.elf]
+
+    vm-->qed
+    qed-->d
+
+    d-->ef
+    ef-->v2o
+    ef-->o2v
+    ef-->p
+    ef-->ip
+    ef-->bmp
+    ef-->er
+    ef-->func
+    ef-->s
+    ef-->k
+
+    p-->dll
+    dll-->dllf
+
+    p-->t
+    t-->tf
+
+    p-->es
+    v2o-->es
+    bmp-->es
+    dllf-->es
+    s-->es
+    tf-->es
+    er-->es
+    func-->es
+    es-->res
+
+    res-->f
+    s-->f
+    p-->f
+    ip-->f
+```
